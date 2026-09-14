@@ -1,1 +1,0 @@
-import{f as e}from"./utils-DAVDzpLC.js";import{t}from"./craft-page-CtPMLTJH.js";var n=e();function r(){return(0,n.jsx)(t,{kind:`screen`,image:`/media/screen.jpg`,video:`/media/films/set.mp4`})}export{r as component};
