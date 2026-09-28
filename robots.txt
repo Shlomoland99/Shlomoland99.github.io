@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.kolframe.com/sitemap.xml
+Sitemap: https://www.kolframe.com/il/sitemap.xml
