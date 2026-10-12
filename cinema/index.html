@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d1b"><meta name="description" content="Kol Frame immersive cinema — קול פריים קולנוע אינטראקטיבי"><title>Kol Frame Cinema | קול פריים</title>
+<style>
+:root{color-scheme:dark;--gold:#e2c78c;--blue:#73a5ff}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#050914;color:#f8f2ea;font-family:system-ui,"Arial",sans-serif}body{overflow-x:hidden}
+#stars{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:.85}
+main{position:relative;z-index:1;min-height:100dvh;display:grid;place-items:center;padding:5rem 1rem 7rem;background:radial-gradient(ellipse at 50% 40%,#18357677,transparent 65%)}
+.screen{position:relative;width:min(1040px,96vw);min-height:430px;padding:clamp(22px,5vw,70px);border:3px solid #bea36c;border-radius:50% 50% 12% 12% / 10% 10% 8% 8%;background:linear-gradient(120deg,#09132a 0%,#111d43 48%,#09132a);box-shadow:0 0 30px #4c75d14d,inset 0 0 100px #6c91f830,0 30px 80px #000;transform:perspective(1400px) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));transition:transform .3s ease-out;display:grid;align-content:center;justify-items:center;gap:1rem;text-align:center;overflow:hidden}
+.screen:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent 0deg,#ffcf803b 28deg,transparent 65deg,#7c9dff40 120deg,transparent 165deg,#e6b86622 230deg,transparent 270deg);animation:orb 19s linear infinite;filter:blur(35px)}
+@keyframes orb{to{transform:rotate(360deg)}}
+.wordmark{position:relative;isolation:isolate;margin:0;font-weight:900;letter-spacing:.055em;line-height:1.07;font-size:clamp(2.25rem,8vw,6rem);background:linear-gradient(110deg,#fff8e5 0%,#ba9154 22%,#ffe4a0 42%,#7e9fe7 58%,#fff6dd 80%,#ae8a4e);background-size:220% auto;background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:0 5px 25px #bbdbff22;filter:drop-shadow(0 0 13px #819ef555);animation:shimmer 7s linear infinite}
+.wordmark.he{direction:rtl;letter-spacing:0;font-family:Arial,"Noto Sans Hebrew",system-ui,sans-serif}
+.wordmark.en{direction:ltr}
+@keyframes shimmer{to{background-position:220% 0}}
+.separator{position:relative;height:1px;width:min(74%,550px);background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);box-shadow:0 0 15px var(--gold)}
+.sub{position:relative;text-transform:uppercase;letter-spacing:.21em;font-size:clamp(.65rem,1.5vw,.9rem);color:#d1dffa}
+.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:2rem}
+button,.button{font:600 13px system-ui;color:#fff3d5;background:#16244b;border:1px solid #d4ba7e;border-radius:99px;padding:13px 19px;cursor:pointer;text-decoration:none}
+button:hover,.button:hover{background:#27457c}button:focus-visible,.button:focus-visible{outline:3px solid #8dbbff;outline-offset:4px}
+.status{font-size:12px;color:#becde7;margin-top:18px;text-align:center;max-width:720px;line-height:1.7}
+.control{position:fixed;left:14px;bottom:14px;z-index:5;background:#0e1a35e8;padding:13px;border:1px solid #cfb87966;border-radius:12px;font-size:12px}
+.back{position:fixed;left:20px;top:20px;z-index:6}
+@media(prefers-reduced-motion:reduce){.screen,.wordmark,.screen:before{animation:none!important;transition:none!important;transform:none!important}}
+@media(max-width:600px){.screen{min-height:360px;padding:20px;border-radius:18px}.wordmark{font-size:clamp(2.1rem,9vw,3.7rem)}.control{position:static;display:inline-block;margin:0 14px 14px}.back{position:relative;display:inline-block;left:auto;top:auto;margin:14px}}
+</style></head>
+<body><canvas id="stars" aria-hidden="true"></canvas><a class="button back" href="/" aria-label="Return to Kol Frame homepage">← Website / לאתר</a>
+<main><section aria-label="Kol Frame immersive cinema" style="width:100%;display:grid;place-items:center"><div class="screen" id="screen"><h1 class="wordmark en" lang="en">KOL FRAME</h1><div class="separator"></div><h2 class="wordmark he" lang="he" dir="rtl">קול פריים</h2><div class="sub">BEYOND THE SCREEN · מעבר למסך</div></div>
+<div class="actions"><button id="full">⛶ Fullscreen / מסך מלא</button><button id="vr">◉ Enter VR / מציאות מדומה</button><button id="ar">◇ Enter AR / מציאות רבודה</button></div>
+<p class="status" id="status" role="status" aria-live="polite">Cinematic desktop mode is available. VR and AR depend on browser and headset support. / מצב קולנוע זמין. מצב VR ו־AR תלוי בתמיכת המכשיר והדפדפן.</p></section></main>
+<div class="control"><label><input id="motion" type="checkbox" checked> Interactive motion / תנועה אינטראקטיבית</label></div>
+<script>
+(()=>{"use strict";const screen=document.getElementById('screen'),status=document.getElementById('status'),motion=document.getElementById('motion'),reduce=matchMedia('(prefers-reduced-motion:reduce)'),canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[],raf=0;const resize=()=>{const d=Math.min(devicePixelRatio||1,2);canvas.width=Math.floor(innerWidth*d);canvas.height=Math.floor(innerHeight*d);ctx?.setTransform(d,0,0,d,0,0);stars=Array.from({length:Math.min(155,Math.round(innerWidth*innerHeight/7000))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.3+.2,v:Math.random()*.18+.04}))};resize();addEventListener('resize',resize,{passive:true});
+function draw(){raf=0;if(!ctx||document.hidden||reduce.matches||!motion.checked)return;ctx.clearRect(0,0,innerWidth,innerHeight);ctx.fillStyle='#afc9ff';for(const p of stars){p.y+=p.v;if(p.y>innerHeight)p.y=0;ctx.globalAlpha=.2+p.r*.3;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;raf=requestAnimationFrame(draw)}draw();document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!raf)draw()});
+motion.addEventListener('change',()=>{if(!motion.checked){screen.style.removeProperty('--rx');screen.style.removeProperty('--ry');ctx?.clearRect(0,0,innerWidth,innerHeight)}else if(!raf)draw()});
+document.addEventListener('pointermove',e=>{if(reduce.matches||!motion.checked||e.pointerType==='touch')return;const x=(e.clientX/innerWidth-.5)*8,y=(e.clientY/innerHeight-.5)*-5;screen.style.setProperty('--ry',x.toFixed(2)+'deg');screen.style.setProperty('--rx',y.toFixed(2)+'deg')},{passive:true});
+document.getElementById('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{status.textContent='Fullscreen is unavailable in this browser. / מסך מלא אינו זמין בדפדפן זה.'})};
+async function supported(type){try{return !!navigator.xr&&await navigator.xr.isSessionSupported(type)}catch{return false}}
+async function enter(type){if(!await supported(type)){status.textContent=type==='immersive-vr'?'VR mode is unsupported on this device/browser. / מצב VR אינו נתמך במכשיר זה.':'AR mode is unsupported on this device/browser. / מצב AR אינו נתמך במכשיר זה.';return}
+status.textContent='WebXR support detected. This cinema preview does not yet include a full stereoscopic XR renderer. / זוהתה תמיכה ב־WebXR. תצוגה זו עדיין אינה כוללת מנוע XR סטריאוסקופי מלא.'}
+document.getElementById('vr').onclick=()=>enter('immersive-vr');document.getElementById('ar').onclick=()=>enter('immersive-ar');
+})();
+</script></body></html>
